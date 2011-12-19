@@ -1,0 +1,6 @@
+data/users.db
+config.coffee
+.DS_Store
+net-game.sublime-project
+net-game.sublime-workspace
+node_modules
