@@ -20,4 +20,5 @@ require('zappa') config.port, ->
   @set 'views', __dirname + '/views'
   @enable 'serve jquery'
   @include 'zi_web'
+  @include 'zi_css'
   @include 'zi_logic'

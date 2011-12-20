@@ -8,6 +8,7 @@ html ->
       '/zappa/jquery.js'
       '/exlib/jquery.tmpl.js'
       '/exlib/knockout-1.3.0beta.js'
+      '/exlib/bootstrap-tabs.js'
 
       '/game_prototype.js'
       '/game_core.js'
@@ -16,5 +17,6 @@ html ->
     ]
     (link rel:"stylesheet",type:"text/css",href:i) for i in [
       "/bootstrap.min.css"
+      "/style.css"
     ]
   body @body
