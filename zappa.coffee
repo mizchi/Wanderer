@@ -6,7 +6,6 @@ require('zappa') config.port, ->
       cookie = handshake.headers.cookie;
       handshake.foo = cookie
       callback(null, true)
-
   @app.use @express.bodyParser()
   @app.use @express.methodOverride()
   @app.use @express.cookieParser()
@@ -20,5 +19,4 @@ require('zappa') config.port, ->
   @set 'views', __dirname + '/views'
   @enable 'serve jquery'
   @include 'zi_web'
-  @include 'zi_css'
   @include 'zi_logic'

@@ -208,6 +208,7 @@ class Smash extends SingleHit
     @fg_charge = 1
 
   affect : (target)->
+    map = @actor.scene._map
     rx = target.x - @actor.x
     ry = target.y - @actor.y
     if rx >= 0
@@ -218,15 +219,12 @@ class Smash extends SingleHit
     kd = 3
     nx = target.x + kd*cos(rad)
     ny = target.y + kd*sin(rad)
-    if !@actor.scene._map[~~(nx)][~~(ny)]
-      console.log 'knockback!'
-      target.x = nx
-      target.y = ny
+    if 0<= nx < map.length and 0<= ny < map[0].length
+      if !@actor.scene._map[~~(nx)][~~(ny)]
+        console.log 'knockback!'
+        target.x = nx
+        target.y = ny
 
-
-
-
-  _calc : (target)->
     return ~~(@actor.status.atk * target.status.def*@damage_rate*randint(100*(1-@random_rate),100*(1+@random_rate))/100)
 
 class Meteor extends AreaHit

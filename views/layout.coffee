@@ -10,8 +10,7 @@ html ->
       '/exlib/knockout-1.3.0beta.js'
       '/exlib/bootstrap-tabs.js'
 
-      '/game_prototype.js'
-      '/game_core.js'
+      '/all.js'
       '/bootstrap.js'
       '/index.js'
     ]

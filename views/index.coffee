@@ -35,7 +35,7 @@ SkillStatusPanel = ->
     div class:"row",->
       $$ "{{each(k,v) keys}}"
       div class:"span1",->
-        button (bind click:"wait_for_skill",{target:'${k}',class:'wait_skill_btn'}),->'${k}'
+        button (bind click:"wait_for_skill",{target:'${k}',class:'wait_skill_btn fill'}),->'${k}'
         $$ "{{if CharInfo().skills.preset[k] }}"
         span "${CharInfo().skills.preset[k] }"
         $$ "{{/if}}"
@@ -68,7 +68,7 @@ SkillLevelPanel = ->
 
           $$ "{{if CharInfo().status.sp > 0}}"
           div class:'span1',->
-            button bind(click:'use_skill_point',{target:'${sname}',class:""}), -> '+'
+            button bind(click:'use_skill_point',{target:'${sname}',class:"fill"}), -> '+'
 
           div class:'span1',->
             button bind(click:'set_skill',visible:'edit_skill_mode',{target:"${sname}"}),-> "set"
@@ -108,23 +108,34 @@ div class:"container-fluid row",->
         li class:"active",-> a href:"#item",->'Item(i)'
         li -> a href:"#skill",-> 'Skill(k)'
         li -> a href:"#character",-> 'Character(c)'
+        li -> a href:"#log",-> 'Log(l)'
+        li -> a href:"#config",-> 'Config(c)'
 
       div class:"pill-content",->
         div class:"active",id:"item",->
-          'Item'
+          'Item(未実装)'
+
         div id:"skill",->
           SkillLevelPanel()
+
         div id:'character',->
           StatusLevelPanel()
+
+        div id:'log',->
+          'Message Log(未実装) '
+
+        div id:'config',->
+          button onclick:'window.grr.scale++',-> '拡大'
+          button onclick:'window.grr.scale--',-> '縮小'
 
 
 coffeescript ->
   $('.tabs').tabs()
 
   canvas =  document.getElementById "game"
-  x = 16
-  y = 12
-  cell = 25
+  x = 12
+  y = 8
+  cell = 38
   canvas.width = x * cell
   canvas.height = y * cell
 
@@ -134,6 +145,9 @@ coffeescript ->
     3:null
     4:null
     5:null
+    6:null
+    7:null
+    8:null
 
   $ =>
     $.get '/api/id' , (name)=>
@@ -142,3 +156,4 @@ coffeescript ->
       window.login name , floor
       window.grr = new GameRenderer x,y,cell
       ko.applyBindings view
+    config = localStorage.config

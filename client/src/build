@@ -1,0 +1,1 @@
+coffee -wcbl -j all.js -o .. extend sprite core
