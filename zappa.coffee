@@ -20,3 +20,4 @@ require('zappa') config.port, ->
   @enable 'serve jquery'
   @include 'zi_web'
   @include 'zi_logic'
+  @include 'zi_ko'
