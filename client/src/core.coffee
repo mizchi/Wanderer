@@ -60,17 +60,19 @@ class GameRenderer
       console.log cx + rx/@scale, cy + ry/@scale
       socket.emit "click_map", x: ~~(cx+rx/@scale) ,y: ~~(cy + ry/@scale)
 
-    unless (config = localStorage.config)
+    if localStorage.config
+      config = JSON.parse localStorage.config
+    else
       config = 
         src : '/audio/kouya.mp3'
         volume : 0.5
+        muted : false
       localStorage.config = JSON.stringify config
-    else 
-      config = JSON.parse localStorage.config
 
     @bgm = new Audio '/audio/kouya.mp3'
     @bgm.volume = config.volume
     @bgm.loop = true
+    @bgm.muted = true
     @bgm.play() if config.volume > 0 
 
   change_scale : (scale)->

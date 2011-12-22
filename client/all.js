@@ -500,18 +500,20 @@ GameRenderer = (function() {
         y: ~~(cy + ry / _this.scale)
       });
     };
-    if (!(config = localStorage.config)) {
+    if (localStorage.config) {
+      config = JSON.parse(localStorage.config);
+    } else {
       config = {
         src: '/audio/kouya.mp3',
-        volume: 0.5
+        volume: 0.5,
+        muted: false
       };
       localStorage.config = JSON.stringify(config);
-    } else {
-      config = JSON.parse(localStorage.config);
     }
     this.bgm = new Audio('/audio/kouya.mp3');
     this.bgm.volume = config.volume;
     this.bgm.loop = true;
+    this.bgm.muted = true;
     if (config.volume > 0) this.bgm.play();
   }
 

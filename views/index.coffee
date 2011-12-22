@@ -125,8 +125,13 @@ div class:"container-fluid row",->
           'Message Log(未実装) '
 
         div id:'config',->
-          button onclick:'window.grr.scale++',-> '拡大'
-          button onclick:'window.grr.scale--',-> '縮小'
+
+          p -> button onclick:'window.grr.scale++',-> '拡大'
+          p -> button onclick:'window.grr.scale--',-> '縮小'
+          p -> button onclick:'''
+            grr.bgm.muted = grr.bgm.muted? false : true;
+            localStorage.config.muted = grr.bgm.muted
+          ''',-> 'BGM再生 on/off'
 
 
 coffeescript ->
@@ -138,16 +143,6 @@ coffeescript ->
   cell = 38
   canvas.width = x * cell
   canvas.height = y * cell
-
-  view.keys = 
-    1:null
-    2:null
-    3:null
-    4:null
-    5:null
-    6:null
-    7:null
-    8:null
 
   $ =>
     $.get '/api/id' , (name)=>
