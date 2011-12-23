@@ -1,4 +1,4 @@
-data/users.db
+savedata/users.db
 config.coffee
 .DS_Store
 net-game.sublime-project

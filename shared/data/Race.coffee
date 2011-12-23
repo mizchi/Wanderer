@@ -1,4 +1,4 @@
-exports.RacialData = 
+exports?.RacialData = 
   human : 
  	  str: 10
  	  int: 10

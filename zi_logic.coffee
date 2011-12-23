@@ -1,6 +1,6 @@
 Users = require('./models').Users
 config = require './config'
-{GameCore} = require './src/core'
+{GameCore} = require './server/core'
 
 dungeon_depth = 50
 

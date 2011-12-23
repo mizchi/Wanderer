@@ -1,1 +1,3 @@
+#coffee -wcbl -j all.js -o .. shared/data/Class shared/data/Race shared/data/ObjectId extend sprite core
+
 coffee -wcbl -j all.js -o .. extend sprite core

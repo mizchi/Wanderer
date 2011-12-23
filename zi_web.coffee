@@ -1,4 +1,4 @@
-{create_new} = require './src/Player'
+{create_new} = require './server/Player'
 config = require './config'
 models = require './models'
 

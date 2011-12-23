@@ -1,6 +1,3 @@
-Skills = require './skills'
-
-
 class WeaponMastery 
   # 武器全般のマスタリ
 
@@ -179,4 +176,4 @@ ClassData =
 #     dex:@dex
 
 
-exports.ClassData = ClassData
+exports?.ClassData = ClassData

@@ -5,8 +5,9 @@
 {Equipment} = require './Equipment'
 {SkillBox} = require './skills'
 
-{RacialData} = require('./racialdata')
-{ClassData} = require('./classdata')
+{RacialData} = require('./shared/data/Race')
+{ClassData} = require('./shared/data/Class')
+
 {Weapons} = require('./equip')
 
 #TODO : Equip Autogeneration

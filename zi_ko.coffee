@@ -1,6 +1,7 @@
 @include = ->
   @client '/index.js': ->
-    window.view =
+    $p = ko.observable
+    window.viewModel =
       keys : 
         1:null
         2:null
@@ -11,10 +12,24 @@
         7:null
         8:null
       ObjectInfo : ko.observable []
-      CharInfo : ko.observable null
+
       CoolTime : ko.observable []
-      edit_skill_mode : ko.observable false
       selected_panel : ko.observable null
+
+      edit_skill_mode : ko.observable false
+
+      char : 
+        name : $p '[name]'
+        status:
+          race : $p '[race]'
+          lv : $p '[class]'
+          class : $p '[class]'
+            
+      set_char : (char)->
+        @char.name char.name
+        @char.status.class char.status.class
+        @char.status.race char.status.race
+        @char.status.lv char.status.lv
 
       use_battle_point: (e)->
         at = $(e.target).attr('target')
@@ -62,15 +77,16 @@
         window.login name , window.floor
 
       socket.on 'update',(data)->
-        view.ObjectInfo data.objs
+        viewModel.ObjectInfo data.objs
         grr.render data
 
       socket.on 'update_ct',(data)->
         # # view.ObjectInfo data.objs
-        view.CoolTime data.cooltime
+        viewModel.CoolTime data.cooltime
 
       socket.on 'update_char' ,(data)->
-        view.CharInfo data
+        viewModel.set_char data
+        # viewModel.char data
 
     # window.logout = ()=>
     #   socket.disconnet()
