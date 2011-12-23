@@ -3,7 +3,7 @@ html ->
   head lang:'ja',->
   title 'Wanderer'
   (link rel:"stylesheet",type:"text/css",href:i) for i in [
-    "/bootstrap.min.css"
+    "/css/bootstrap.min.css"
   ]
 
 body ->
