@@ -18,6 +18,6 @@ require('zappa') config.port, ->
   @app.use @express.favicon()
   @set 'views', __dirname + '/views'
   @enable 'serve jquery'
-  @include 'zi_web'
-  @include 'zi_logic'
-  @include 'zi_ko'
+  @include 'web'
+  @include 'gdriver'
+  @include 'ko'
