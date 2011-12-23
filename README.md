@@ -4,7 +4,7 @@ diabloっぽいネトゲつくろうとしたもの
 GoogleChrome/Firefox4.0以上等、WebSocket対応ブラウザに対応。  
 スマホは確認してないけどキーボード必須。  
 
-![ss](https://github.com/mizchi/ws-netgame/raw/master/doc/ss2.jpg "ss")
+![ss](https://github.com/mizchi/ws-netgame/raw/master/shared/doc/ss2.jpg "ss")
 
 ## How to play ##
 クラスと種族を選択してキャラ作成  
