@@ -1,5 +1,5 @@
 nstore = require 'nstore'
-exports.Users = nstore.new("savedata/users.db")
+exports.Users = nstore.new("server/savedata/users.db")
 
 save = (char,fn=->)->
   return fn(true,null) unless char?.name

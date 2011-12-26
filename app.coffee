@@ -14,10 +14,9 @@ require('zappa') config.port, ->
     cookie: { maxAge: 86400 * 1000 }
   @app.use @app.router
   @app.use @express.static __dirname+'/client'
-  @app.set 'views', __dirname + '/views'
+  @app.set 'views', __dirname + '/client/templates'
   @app.use @express.favicon()
   @set 'views', __dirname + '/views'
   @enable 'serve jquery'
   @include 'web'
-  @include 'gdriver'
-  @include 'ko'
+  @include 'bloadcaster'

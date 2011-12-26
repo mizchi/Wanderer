@@ -16,7 +16,7 @@ GoogleChrome/Firefox4.0以上等、WebSocket対応ブラウザに対応。
 
 ### Race ###
 
-* Human 平均的 
+    * Human 平均的 
 * Elf   intが高い
 * Dwarf strが高い
 
@@ -45,8 +45,6 @@ $ mv config-sample.coffee config.coffee
 $ node server.js  
 
 ## ChangeLog ##
-
-### NEXT
 
 ### v.0.0.10
 * knockout.jsをv1.3devからv2.0.0へ

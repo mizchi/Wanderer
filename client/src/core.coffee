@@ -69,7 +69,7 @@ class GameRenderer
         muted : false
       localStorage.config = JSON.stringify config
 
-    @bgm = new Audio '/audio/kouya.mp3'
+    @bgm = new Audio '/assets/audio/kouya.mp3'
     @bgm.volume = config.volume
     @bgm.loop = true
     @bgm.muted = true
