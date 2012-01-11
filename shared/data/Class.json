@@ -1,0 +1,100 @@
+{
+  "Lord" : {
+    "status" : {
+        "str" : 1
+      , "int" : -1
+      , "dex" : 0
+    },
+
+    "preset" : {
+        "1" : "Atack"
+      , "2" :  "Heal"
+    },
+
+    "learned":{
+        "WeaponMastery" : 1
+      , "Atack" : 1
+      , "Heal": 1
+      , "Lightning": 0
+    } 
+  },
+
+  "Warrior" : {
+    "status" : {
+        "str" : 4
+      , "int" : -4
+      , "dex" : -1
+    },
+
+    "preset" : {
+        "1" : "Atack"
+      , "2" : "Smash"
+    },
+
+    "learned":{ 
+        "Atack" : 1
+      , "Smash" : 1
+      , "WeaponMastery": 1
+      , "SwordMastery" : 0
+      , "LanceMastery" : 0
+      , "ArmorMastery" : 0 
+      , "EarthWave" : 0 
+      , "Berserk" : 0 
+      , "EnvokeElement" : 0
+    }
+  },
+
+  "Rogue" : {
+    "status":{
+        "str" : -2
+      , "int" : -3
+      , "dex" : 4
+    },
+
+    "preset" : {
+        "1": "Atack"
+    },
+
+    "learned":{ 
+        "Atack" : 1
+      , "DaggerMastery": 0
+      , "PoizonMastery": 0
+      , "Tricky": 0
+    }
+
+  },
+
+  "Sorcerer" : {
+    "status":{
+        "str" : -4
+      , "int" : 4
+      , "dex" : -1
+      },
+    "preset" :{ 
+        "1" : "Lightning"
+      , "2" : "Meteor"
+      },
+
+    "learned" :{
+        "MagicMastery"  : 0
+      , "Lightning": 1
+      , "Meteor" : 1 
+    }
+  },
+
+  "Norvice" : {
+    "status":{
+        "str" : 0
+      , "int" : 0
+      , "dex" : 0 
+    },
+
+    "preset" :{ 
+        "1" : "Atack"
+    },
+
+    "learned" :{
+        "Atack":1
+    }
+  }
+}

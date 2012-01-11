@@ -5,8 +5,8 @@
 {Equipment} = require './Equipment'
 {SkillBox} = require './skills'
 
-{RacialData} = require('./shared/data/Race')
-{ClassData} = require('./shared/data/Class')
+RacialData = require('./shared/data/Race')
+ClassData = require('./shared/data/Class')
 
 {Weapons} = require('./equip')
 
@@ -21,6 +21,7 @@ class Monster extends Character
     racial_status = RacialData[@race]
     class_data = ClassData[@class]
     sum = 0
+    console.log @class
     for i in ['str','int','dex']
       racial_status[i] += class_data.status[i]
       sum += racial_status[i]

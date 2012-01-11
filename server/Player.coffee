@@ -7,8 +7,8 @@
 Skills = require './skills'
 {SkillBox} = require './skills'
 
-racial_data = require('./shared/data/Race').RacialData
-class_data = require('./shared/data/Class').ClassData
+racial_data = require('./shared/data/Race')
+class_data = require('./shared/data/Class')
 {random,sqrt,min,max,sin,cos} = Math
 
 class Player extends Character
