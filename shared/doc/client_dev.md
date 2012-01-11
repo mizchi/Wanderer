@@ -21,8 +21,6 @@ HightMap , CollitionMap , ObjectMap の3つに分割することを検討中。(
 
 objsは以下のArray  
 
-
-~~~~~
 [
   {
     o:  # 対象の情報
