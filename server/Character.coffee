@@ -235,4 +235,6 @@ class Character extends Sprite
       equipment : @equipment.toData() 
       items : @items.toData()
 
-exports.Character = Character
+Character::create = -> new Character
+exports.Character = Character 
+# module.exports = Character
