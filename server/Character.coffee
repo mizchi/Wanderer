@@ -235,5 +235,4 @@ class Character extends Sprite
       equipment : @equipment.toData() 
       items : @items.toData()
 
-
 exports.Character = Character
