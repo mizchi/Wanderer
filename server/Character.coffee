@@ -9,19 +9,47 @@ Skill = require('./skills')
 Skills = require './skills'
 {ItemBox} = require './ItemBox'
 
+ClassData = require('./shared/data/Class.json')
+RaceData = require('./shared/data/Race.json')
+
 class Character extends Sprite
-  constructor: (@scene , @x=0,@y=0,@group=ObjectId.Enemy ,status={}) ->
-    @pass = ''
-    super @x, @y
-    @keys = {}
+  constructor: (@context , params) ->
+    @_load params
+
+    @hp = @HP = ~~(ClassData[@Class].spec.HP_RATE*(
+        @status.str*1.5+
+        @status.dex*1.0+
+        @status.int*0.5
+      ))
+
+    @mp = @MP = ~~(ClassData[@Class].spec.MP_RATE*(
+        @status.str*0.5+
+        @status.dex*1.0+
+        @status.int*1.5
+      ))
+
     @target = null
     @dir = 0
-    @id = ~~(random() * 1000)
+
+    @uid = ~~(random() * 1000)
     @cnt = ~~(random() * 60)
 
     @items = new ItemBox
     @animation = []
     @_path = []
+
+  _load:(params)->
+    @Race = params.Race
+    @Class = params.Class
+    @x = params.x or 0
+    @y = params.y or 0
+    @lv = 1 or params.lv
+
+    if params.status
+      @status = params.status 
+    else
+      @status = {}
+      (@status[i] = ClassData[@Class].init_bonus[i]+RaceData[@Race].init_bonus[i]) for i in ['str','int','dex']
 
   update:(objs)->
     @cnt++
@@ -209,9 +237,7 @@ class Character extends Sprite
     @die(actor) if @is_dead() and before
     return @is_alive()
 
-
-
-  is_alive:()-> @status.hp > 1
+  is_alive:()-> @hp > 1
   is_dead:()-> ! @is_alive()
 
   set_pos : (@x=0,@y=0)->
@@ -235,6 +261,4 @@ class Character extends Sprite
       equipment : @equipment.toData() 
       items : @items.toData()
 
-Character::create = -> new Character
-exports.Character = Character 
-# module.exports = Character
+module.exports = Character

@@ -1,9 +1,14 @@
 {
   "Lord" : {
-    "status" : {
-        "str" : 1
-      , "int" : -1
-      , "dex" : 0
+    "init_bonus" : {
+        "str" : 11
+      , "int" : 9
+      , "dex" : 10
+    },
+
+    "spec":{
+        "HP_RATE":10
+      , "MP_RATE":10
     },
 
     "preset" : {
@@ -20,10 +25,15 @@
   },
 
   "Warrior" : {
-    "status" : {
+    "init_bonus" : {
         "str" : 4
       , "int" : -4
       , "dex" : -1
+    },
+
+    "spec":{
+        "HP_RATE":10
+      , "MP_RATE":10
     },
 
     "preset" : {
@@ -45,10 +55,15 @@
   },
 
   "Rogue" : {
-    "status":{
+    "init_bonus":{
         "str" : -2
       , "int" : -3
       , "dex" : 4
+    },
+
+    "spec":{
+        "HP_RATE":10
+      , "MP_RATE":10
     },
 
     "preset" : {
@@ -65,7 +80,7 @@
   },
 
   "Sorcerer" : {
-    "status":{
+    "init_bonus":{
         "str" : -4
       , "int" : 4
       , "dex" : -1
@@ -75,6 +90,11 @@
       , "2" : "Meteor"
       },
 
+    "spec":{
+        "HP_RATE":10
+      , "MP_RATE":10
+    },
+
     "learned" :{
         "MagicMastery"  : 0
       , "Lightning": 1
@@ -83,10 +103,15 @@
   },
 
   "Norvice" : {
-    "status":{
+    "init_bonus":{
         "str" : 0
       , "int" : 0
       , "dex" : 0 
+    },
+
+    "spec":{
+        "HP_RATE":10
+      , "MP_RATE":10
     },
 
     "preset" :{ 

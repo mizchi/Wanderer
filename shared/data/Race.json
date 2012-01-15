@@ -1,32 +1,44 @@
 {
-  "human" :{ 
+  "Human" :{ 
+    "init_bonus":{
 	    "str": 10
 	  , "int": 10
 	  , "dex": 11
+    }
   },
-  "elf" : {
+  "Elf" : {
+    "init_bonus":{
 	    "str": 9
 	  , "int": 12
 	  , "dex": 10
+    }
   },
-  "dwarf" :{ 
-	    "str": 12
-	  , "int": 9
-    , "dex": 10
+  "Dwarf" :{
+    "init_bonus":{
+	      "str": 2
+	    , "int": -1
+      , "dex": 0
+    }
   },
-  "goblin" :{ 
-      "str": 8
-    , "int": 4
-    , "dex": 4
+  "Goblin" :{ 
+    "init_bonus":{
+      "str": 1
+    , "int": -5
+    , "dex": -5
+    }
   },
   "hound_dog" : {
+    "init_bonus":{
       "str": 10
     , "int": 4
     , "dex": 12
+    }
   },
   "ent" :{ 
+    "init_bonus":{
       "str": 11
     , "int": 14
     , "dex": 4
+    }
   }
 }
