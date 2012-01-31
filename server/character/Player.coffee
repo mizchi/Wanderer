@@ -4,8 +4,8 @@
 {Equipment} = require './Equipment'
 {ItemBox} = require './ItemBox'
 
-Skills = require './skills'
-{SkillBox} = require './skills'
+Skills = require './skill/skills'
+{SkillBox} = require './skill/skills'
 
 racial_data = require('./shared/data/Race')
 class_data = require('./shared/data/Class')

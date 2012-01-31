@@ -1,55 +1,61 @@
 # manual backup
-Skill = require('./skills')
-{Weapons} = require('./equip')
-{random,sqrt,min,max,sin,cos} = Math
-{Sprite} = require('./sprites')
-{ObjectId} = require('./ObjectId')
-{randint} = require('./Util')
-{SkillBox} = require './skills'
-Skills = require './skills'
-{ItemBox} = require './ItemBox'
+# {Weapons} = require('./equip')
+# {ObjectId} = require('./ObjectId')
+# {randint} = require('./Util')
+# {SkillBox} = require './skill/skills'
+# Skills = require './skill/skills'
+# Skill = require('./skill/skills')
+# {ItemBox} = require './ItemBox'
 
-ClassData = require('./shared/data/Class.json')
-RaceData = require('./shared/data/Race.json')
+{Sprite} = require('./../sprite/Sprite')
+ClassData = require('./../shared/data/Class.json')
+RaceData = require('./../shared/data/Race.json')
+
+{random,sqrt,min,max,sin,cos} = Math
 
 class Character extends Sprite
-  constructor: (@context , params) ->
-    @_load params
+  constructor: (@context , model) ->
+    # @_load params
+    @status = {}
+    for i in ["str","int","dex"]
+      @status[i] = model.base_status[i]
 
-    @hp = @HP = ~~(ClassData[@Class].spec.HP_RATE*(
+    @status.hp = @status.HP = ~~(ClassData[model.class_name].spec.HP_RATE*(
         @status.str*1.5+
         @status.dex*1.0+
         @status.int*0.5
       ))
 
-    @mp = @MP = ~~(ClassData[@Class].spec.MP_RATE*(
+    @status.mp = @status.MP = ~~(ClassData[model.class_name].spec.MP_RATE*(
         @status.str*0.5+
         @status.dex*1.0+
         @status.int*1.5
       ))
 
-    @target = null
-    @dir = 0
+    @status.str = model.base_status.str*1.0
 
+    @x = 0 
+    @y = 0
+    @dir = 0
+    @target = null
     @uid = ~~(random() * 1000)
     @cnt = ~~(random() * 60)
 
-    @items = new ItemBox
+    # @items = new ItemBox
     @animation = []
     @_path = []
 
-  _load:(params)->
-    @Race = params.Race
-    @Class = params.Class
-    @x = params.x or 0
-    @y = params.y or 0
-    @lv = 1 or params.lv
+  _merge : (obj1,obj2)->
+    ret = {}
+    for k,v of obj1
+      ret[k] = v
 
-    if params.status
-      @status = params.status 
-    else
-      @status = {}
-      (@status[i] = ClassData[@Class].init_bonus[i]+RaceData[@Race].init_bonus[i]) for i in ['str','int','dex']
+    for k,v of obj2
+      if ret[k]?
+        ret[k] += v
+      else 
+        ret[k] = v
+    return ret
 
   update:(objs)->
     @cnt++
@@ -58,15 +64,22 @@ class Character extends Sprite
       target = @recognize(objs)
       @action(target)
 
+  charge:()->
+    @check(@status)
+
+
+  # 状態をチェックし、更新する
   affected:()->
     @check(@status)
     @regenerate() if @cnt%30 == 0
 
+  # 周囲の状態を認識・評価
   recognize: (objs)->
     @search objs
     @select_skill()
     return objs
 
+  # アクションを行う
   action:(target)->
     @move()
     for i in [1..9]
@@ -260,5 +273,41 @@ class Character extends Sprite
       status: @status.toData()
       equipment : @equipment.toData() 
       items : @items.toData()
+
+class SkillBox
+  constructor:(@actor , @learned={},@preset={})->
+    @sets = #(i:null for i in [1..9])
+      1:null
+      2:null
+      3:null
+      4:null
+      5:null
+      6:null
+      7:null
+      8:null
+    @build(@preset)
+
+  set_key : (key,skill_name)->
+    lv = @learned[skill_name] or 0
+    if exports[skill_name] and not (_u.any @sets,(k,v)-> v.name is skill_name) and @learned[skill_name] > 0
+      @sets[key] = new exports[skill_name](@actor,lv)
+      @preset[key] = skill_name 
+
+  build : (preset)->
+    for key,skill_name of preset
+      @set_key key, skill_name
+
+  use_skill_point:(sname)->
+    if @actor.status.sp>0 and @learned[sname]?
+      @learned[sname] +=1
+      @actor.status.sp--
+      @build()
+      true
+    else
+      false
+
+  toData:->
+    learned : @learned
+    preset : @preset
 
 module.exports = Character

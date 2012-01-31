@@ -1,4 +1,4 @@
-{ObjectId} = require './ObjectId'
+{ObjectId} = require '../shared/data/ObjectId'
 
 class Sprite
   constructor: (@x=0,@y=0,@scale=10) ->

@@ -1,5 +1,5 @@
-{ObjectId} = require './ObjectId'
-{randint} = require './Util'
+{ObjectId} = require './../ObjectId'
+{randint} = require './../Util'
 {abs,random,sin,cos} = Math
 _u = require 'underscore'
 
@@ -23,26 +23,26 @@ brezenham_hit = (map,fx,fy,tx,ty)->
     return straight map,fx,fy,tx,ty
   # 必ずスタート地点を左側に
   if tx < fx
-    [tx,ty,fx,fy] = [fx,fy,tx,ty] 
+    [tx,ty,fx,fy] = [fx,fy,tx,ty]
   a = (ty-fy)/(tx-fy)
   # x軸のほうが距離がある場合
   if a<1
     while tx > fx
       fx++
-      fy+= a  
+      fy+= a
       if fy%1 >0.5
         return false if map[fx][~~(fy+1)]
-      else 
+      else
         return false if map[fx][~~(fy)]
   # y軸のほうが距離がある場合
-  else 
+  else
     a = 1/a
     while ty > fy
       fx+=a
-      fy+=1  
+      fy+=1
       if fx%1 >0.5
         return false if map[~~fx+1][fy]
-      else 
+      else
         return false if map[~~fx][fy]
   true
 
@@ -129,9 +129,9 @@ class ChainHit extends DamageHit
           tar.push (e = @actor.target )
           nobjs = e.find_obj(e.group,objs,@range/2)
           nobjs.splice nobjs.indexOf(e),1
-          if nobjs.length is 0 
+          if nobjs.length is 0
             return tar
-          if nobjs.length > 0  
+          if nobjs.length > 0
             tar.push nobjs[ ~~(nobjs.length*Math.random()) ]
             return tar
     return []
@@ -286,41 +286,4 @@ exports.Heal = Heal
 exports.Smash = Smash
 exports.Meteor = Meteor
 exports.Lightning = Lightning
-
-class SkillBox
-  constructor:(@actor , @learned={},@preset={})->
-    @sets = #(i:null for i in [1..9])
-      1:null
-      2:null
-      3:null
-      4:null
-      5:null
-      6:null
-      7:null
-      8:null
-    @build(@preset)
-
-  set_key : (key,skill_name)->
-    lv = @learned[skill_name] or 0
-    if exports[skill_name] and not (_u.any @sets,(k,v)-> v.name is skill_name) and @learned[skill_name] > 0
-      @sets[key] = new exports[skill_name](@actor,lv)
-      @preset[key] = skill_name 
-
-  build : (preset)->
-    for key,skill_name of preset
-      @set_key key, skill_name
-
-  use_skill_point:(sname)->
-    if @actor.status.sp>0 and @learned[sname]?
-      @learned[sname] +=1
-      @actor.status.sp--
-      @build()
-      true
-    else
-      false
-
-  toData:->
-    learned : @learned
-    preset : @preset
-
 exports.SkillBox = SkillBox
