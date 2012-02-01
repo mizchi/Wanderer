@@ -7,6 +7,7 @@
 # Skill = require('./skill/skills')
 # {ItemBox} = require './ItemBox'
 
+require 'sugar'
 {Sprite} = require('./../sprite/Sprite')
 ClassData = require('./../shared/data/Class.json')
 RaceData = require('./../shared/data/Race.json')
@@ -16,23 +17,7 @@ RaceData = require('./../shared/data/Race.json')
 class Character extends Sprite
   constructor: (@context , model) ->
     # @_load params
-    @status = {}
-    for i in ["str","int","dex"]
-      @status[i] = model.base_status[i]
-
-    @status.hp = @status.HP = ~~(ClassData[model.class_name].spec.HP_RATE*(
-        @status.str*1.5+
-        @status.dex*1.0+
-        @status.int*0.5
-      ))
-
-    @status.mp = @status.MP = ~~(ClassData[model.class_name].spec.MP_RATE*(
-        @status.str*0.5+
-        @status.dex*1.0+
-        @status.int*1.5
-      ))
-
-    @status.str = model.base_status.str*1.0
+    @build(model)
 
     @x = 0 
     @y = 0
@@ -44,6 +29,31 @@ class Character extends Sprite
     # @items = new ItemBox
     @animation = []
     @_path = []
+
+  build: (model)->
+    @status = {}
+    for i in ["str","int","dex"]
+      @status[i] = model.base_status[i]
+
+    @status.hp = @status.HP = ~~(
+      ClassData[model.class_name].spec.HP_RATE*(
+        @status.str*1.5+
+        @status.dex*1.0+
+        @status.int*0.5
+      ))
+
+    @status.mp = @status.MP = ~~(ClassData[model.class_name].spec.MP_RATE*(
+        @status.str*0.5+
+        @status.dex*1.0+
+        @status.int*1.5
+      ))
+    @status.str = model.base_status.str*1.0
+    @skillset = []
+    for sk_name,i in model.skillset 
+      S = require("./skill/#{sk_name}")
+      @skillset[i] = new S(@)
+    @selected_skill = @skillset[0]
+
 
   _merge : (obj1,obj2)->
     ret = {}

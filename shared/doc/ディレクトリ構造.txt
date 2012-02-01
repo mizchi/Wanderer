@@ -1,0 +1,29 @@
+ディレクトリ構造
+root/
+  - game_driver.coffee  ゲームロジックを回しクライアントに配信
+
+  client/ # クライアント側
+
+  server/ # ゲームロジックを記述した
+
+    model/
+      - Model.coffee # ベースクラス
+      - CharacterModel.coffee # キャラクターのモデル
+
+    character/
+      - Character.coffee  # ベースクラス
+      - Player.coffee # プレーヤーの操作受付
+      - Monster.coffee # モンスターのAI
+
+      skill/
+        - Skill.coffee # Skillのベースクラス
+        - Atack.coffee # Atackスキル
+
+      item/
+        - Item.coffee # ベースクラス
+
+        weapon/
+          - Weapon.coffee # ベースクラス
+
+        abd/
+          - Weapon.coffee # ベースクラス

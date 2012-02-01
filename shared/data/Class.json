@@ -66,9 +66,9 @@
       , "MP_RATE":10
     },
 
-    "skillset" : {
-        "1": "Atack"
-    },
+    "skillset" : [
+        "Atack"
+    ],
 
     "learned":{ 
         "Atack" : 1
@@ -85,10 +85,10 @@
       , "int" : 4
       , "dex" : -1
       },
-    "skillset" :{ 
-        "1" : "Lightning"
-      , "2" : "Meteor"
-      },
+    "skillset" :[
+        "Lightning"
+      , "Meteor"
+      ],
 
     "spec":{
         "HP_RATE":10
@@ -114,9 +114,9 @@
       , "MP_RATE":10
     },
 
-    "skillset" :{ 
-        "1" : "Atack"
-    },
+    "skillset" :[
+        "Atack"
+    ],
 
     "learned" :{
         "Atack":1

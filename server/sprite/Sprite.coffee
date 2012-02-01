@@ -7,11 +7,6 @@ class Sprite
     yd = Math.pow (@y-target.y) ,2
     return Math.sqrt xd+yd
 
-  getpos_relative:(cam)->
-    pos =
-      vx : 320 + @x - cam.x
-      vy : 240 + @y - cam.y
-
   find_obj:(group_id,targets, range)->
     targets.filter (t)=>
       t.group is group_id and @get_distance(t) < range
@@ -24,6 +19,7 @@ class Sprite
 
   is_alive:()->
     false
+    
   is_dead:()->
     not @is_alive()
 

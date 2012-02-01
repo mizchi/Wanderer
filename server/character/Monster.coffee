@@ -15,7 +15,6 @@ ClassData = require('./shared/data/Class')
 class Monster extends Character 
   constructor : (@class ,@race,equipment) ->
     @set_pos()
-    @dir = 0
     # @id = ObjectId.Monster
 
     racial_status = RacialData[@race]
