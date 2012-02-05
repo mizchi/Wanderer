@@ -1,18 +1,26 @@
 # manual backup
-# {Weapons} = require('./equip')
-# {ObjectId} = require('./ObjectId')
-# {randint} = require('./Util')
-# {SkillBox} = require './skill/skills'
 # Skills = require './skill/skills'
 # Skill = require('./skill/skills')
 # {ItemBox} = require './ItemBox'
-
 require 'sugar'
-{Sprite} = require('./../sprite/Sprite')
+# Object.extend()
+# 
+Sprite = require('./../sprite/Sprite')
+
 ClassData = require('./../shared/data/Class.json')
 RaceData = require('./../shared/data/Race.json')
 
+{ObjectId} = require './../shared/data/ObjectId'
+
 {random,sqrt,min,max,sin,cos} = Math
+
+# class RecogEngine
+#   constructor:(@actor)->
+#   guess :->
+#   get_skill:->
+#   get_target:->
+#   get_distination:->
+
 
 class Character extends Sprite
   constructor: (@context , model) ->
@@ -23,26 +31,37 @@ class Character extends Sprite
     @y = 0
     @dir = 0
     @target = null
-    @uid = ~~(random() * 1000)
-    @cnt = ~~(random() * 60)
+    @uid = Number.random(0,1000)
+    @cnt = Number.random(0,60)
 
-    # @items = new ItemBox
     @animation = []
     @_path = []
 
+  """  ビルド系メソッド
+
+  build
+    modelクラスから渡された変数からステータスを作る
+
+  build_by_initial_rate 
+    lvに応じて自動的に
+
+  _merge 
+    複数のステータス群から任意のステータスを足し合わせるヘルパ関数
+
+  """
   build: (model)->
     @status = {}
     for i in ["str","int","dex"]
       @status[i] = model.base_status[i]
 
-    @status.hp = @status.HP = ~~(
+    @hp = @HP = ~~(
       ClassData[model.class_name].spec.HP_RATE*(
         @status.str*1.5+
         @status.dex*1.0+
         @status.int*0.5
       ))
 
-    @status.mp = @status.MP = ~~(ClassData[model.class_name].spec.MP_RATE*(
+    @mp = @MP = ~~(ClassData[model.class_name].spec.MP_RATE*(
         @status.str*0.5+
         @status.dex*1.0+
         @status.int*1.5
@@ -54,6 +73,15 @@ class Character extends Sprite
       @skillset[i] = new S(@)
     @selected_skill = @skillset[0]
 
+  build_by_initial_rate:->
+    # 初期ステータスの比率に応じて成長率を設定
+    sum = 0
+    for i in ['str','int','dex']
+      racial_status[i] += class_data.status[i]
+      sum += racial_status[i]
+
+    for i in ['str','int','dex']
+      racial_status[i] += ~~(@lv*racial_status[i]/sum/@per_rate)
 
   _merge : (obj1,obj2)->
     ret = {}
@@ -67,15 +95,26 @@ class Character extends Sprite
         ret[k] = v
     return ret
 
+
+  """  update系メソッド
+
+  #affected 
+    状態を更新
+
+  #recognize 
+    状態を認識
+
+  #action
+    認識状態に応じて行動
+
+  """
+
   update:(objs)->
     @cnt++
     if @is_alive()
       @affected()
-      target = @recognize(objs)
-      @action(target)
-
-  charge:()->
-    @check(@status)
+      @recognize(objs)
+      @action()
 
 
   # 状態をチェックし、更新する
@@ -92,9 +131,8 @@ class Character extends Sprite
   # アクションを行う
   action:(target)->
     @move()
-    for i in [1..9]
-      @skills.sets[i].charge(false) if @skills.sets[i]
-    @selected_skill.charge(true) #update(target)
+    for s in @skillset
+      s.charge(s is @selected_skill)
     @selected_skill.exec(target) #update(target)
 
 
@@ -113,6 +151,14 @@ class Character extends Sprite
     if @status.hp < @status.HP
       @status.hp += 1
 
+  """
+  #search
+    周囲を探索し、ターゲット候補を搾り出す
+
+  #shift_target
+    ターゲット候補の中から次のターゲットに移る
+  """
+
   # recognize
   search : (objs)->
     range = (if @target then @status.trace_range else @status.active_range)
@@ -130,41 +176,8 @@ class Character extends Sprite
       @target = enemies[0]
       console.log "#{@name} find #{@target.name}"
 
+
   select_skill: ()->
-    @selected_skill = new Skill.Atack(@)
-
-  onHealed : (amount)->
-
-  update_path : (fp ,tp )->
-    [fx ,fy] = fp
-    from = [~~(fx),~~(fy)]
-    [tx ,ty] = tp
-    to = [~~(tx),~~(ty)]
-
-    @_path = @scene.search_path( from ,to )
-    @_path = @_path.map (i)=> @scene.get_point i[0],i[1]
-    @to = @_path.shift()
-
-  wander : ()->
-    [tx,ty] = @scene.get_point(@x,@y)
-    @to = [tx+randint(-1,1),ty+randint(-1,1)]
-
-  step_forward: (to_x , to_y, wide)->
-    @set_dir(to_x,to_y)
-    [
-      @x + wide * cos(@dir)
-      @y + wide * sin(@dir)
-    ]
-
-  onDamaged : (amount)->
-
-  is_waiting : ()->
-    if @target
-      @set_dir(@target.x,@target.y)
-      return true if @get_distance(@target) < @selected_skill.range
-    else if @group isnt ObjectId.Player
-      return true if @cnt%60 < 15
-    return false
 
   move: ()->
     if @_on_going_destination
@@ -211,30 +224,63 @@ class Character extends Sprite
     @_lx_ = @x
     @_ly_ = @y
 
+  set_dir: (x,y)->
+    rx = x - @x
+    ry = y - @y
+    if rx >= 0
+      @dir = Math.atan( ry / rx  )
+    else
+      @dir = Math.PI - Math.atan( ry / - rx  )
+
+  update_path : (fp ,tp )->
+    [fx ,fy] = fp
+    from = [~~(fx),~~(fy)]
+    [tx ,ty] = tp
+    to = [~~(tx),~~(ty)]
+
+    @_path = @scene.search_path( from ,to )
+    @_path = @_path.map (i)=> @scene.get_point i[0],i[1]
+    @to = @_path.shift()
+
+  is_waiting : ()->
+    if @target
+      @set_dir(@target.x,@target.y)
+      return true if @get_distance(@target) < @selected_skill.range
+    else if @group isnt ObjectId.Player
+      return true if @cnt%60 < 15
+    return false
+
+  wander : ()->
+    [tx,ty] = @scene.get_point(@x,@y)
+    @to = [tx+randint(-1,1),ty+randint(-1,1)]
+
+  step_forward: (to_x , to_y, wide)->
+    @set_dir(to_x,to_y)
+    [
+      @x + wide * cos(@dir)
+      @y + wide * sin(@dir)
+    ]
+
+  onDamaged : (amount)->
+  onHealed : (amount)->
   die : (actor)->
     @cnt = 0
     actor.status.gold += ~~(random()*100)
     actor.status.get_exp(@status.lv*10)
     console.log "#{@name} is killed by #{actor.name}." if actor
-
-  shift_target:(targets)->
-    if @target and targets.length > 0
-      if not @target in targets
-        @target = targets[0]
-        return
-      else if targets.length == 1
-        @target = targets[0]
-        return
-      if targets.length > 1
-        cur = targets.indexOf @target
-        if cur+1 >= targets.length
-          cur = 0
-        else
-          cur += 1
-        @target = targets[cur]
+  add_damage : (actor, amount)->
+    before = @is_alive()
+    @status.hp -= amount
+    unless @target
+      if @get_distance(actor) < @status.trace_range
+        @target = actor
+    @die(actor) if @is_dead() and before
+    return @is_alive()
+  is_alive:()-> @hp > 0
+  is_dead:()-> ! @is_alive()
 
 
-  equip_item : (item)->
+  equip : (item)->
     if item.at in (k for k,v of @equipment)
       @equipment[item.at] = item
     false
@@ -250,74 +296,8 @@ class Character extends Sprite
     0
     # (item?[param] or 0 for at,item of @equipment).reduce (x,y)-> x+y
 
-
-  add_damage : (actor, amount)->
-    before = @is_alive()
-    @status.hp -= amount
-    unless @target
-      if @get_distance(actor) < @status.trace_range
-        @target = actor
-    @die(actor) if @is_dead() and before
-    return @is_alive()
-
-  is_alive:()-> @hp > 1
-  is_dead:()-> ! @is_alive()
-
-  set_pos : (@x=0,@y=0)->
-  set_dir: (x,y)->
-    rx = x - @x
-    ry = y - @y
-    if rx >= 0
-      @dir = Math.atan( ry / rx  )
-    else
-      @dir = Math.PI - Math.atan( ry / - rx  )
-
   add_animation:(animation)->
     @animation.push(animation)
 
-  toData :()->
-    obj = 
-      name  : @name
-      pass  : @pass
-      skills: @skills.toData()
-      status: @status.toData()
-      equipment : @equipment.toData() 
-      items : @items.toData()
-
-class SkillBox
-  constructor:(@actor , @learned={},@preset={})->
-    @sets = #(i:null for i in [1..9])
-      1:null
-      2:null
-      3:null
-      4:null
-      5:null
-      6:null
-      7:null
-      8:null
-    @build(@preset)
-
-  set_key : (key,skill_name)->
-    lv = @learned[skill_name] or 0
-    if exports[skill_name] and not (_u.any @sets,(k,v)-> v.name is skill_name) and @learned[skill_name] > 0
-      @sets[key] = new exports[skill_name](@actor,lv)
-      @preset[key] = skill_name 
-
-  build : (preset)->
-    for key,skill_name of preset
-      @set_key key, skill_name
-
-  use_skill_point:(sname)->
-    if @actor.status.sp>0 and @learned[sname]?
-      @learned[sname] +=1
-      @actor.status.sp--
-      @build()
-      true
-    else
-      false
-
-  toData:->
-    learned : @learned
-    preset : @preset
 
 module.exports = Character
