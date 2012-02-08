@@ -2,3 +2,4 @@ savedata/users.db
 config.coffee
 .DS_Store
 node_modules
+.nide

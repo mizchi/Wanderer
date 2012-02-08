@@ -35,7 +35,7 @@ class Skill
     @ct >= @CT
 
   can_exec:()->
-    @get_charge_rate() >= 1 
+    @get_charge_rate() >= 1 and @target?.is_alive()
 
   exec:(objs)->
   _calc:(target)-> return 1
