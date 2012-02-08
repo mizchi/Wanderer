@@ -15,12 +15,11 @@ describe 'DungeonTest',->
     dungeon.join '3412341',char
 
   it '規定値までモンスターをスポーン',->
-    # while dungeon.monsters.length < dungeon.max_spawn_count
     dungeon.spawn_monster() for i in [1..1000]
     dungeon.monsters.length.should.equal dungeon.max_spawn_count
 
   it '#update',->
-    dungeon.update()
+    dungeon.update() for _ in [1..1000]
   
 
 

@@ -1,10 +1,10 @@
 DamageHit = require './DamageHit'
 class SingleHit extends DamageHit
   effect : 'Slash'
-  _get_targets:(objs)->
-    if @actor.target
-      if @actor.get_distance(@actor.target) < @range
-        return [ @actor.target ]
+  _get_targets:()->
+    if @actor.target()
+      if @actor.get_distance(@actor.target()) < @range
+        return [ @actor.target()]
     return []
 
   _calc : (target)->

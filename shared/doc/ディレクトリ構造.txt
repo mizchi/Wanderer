@@ -1,10 +1,19 @@
 ディレクトリ構造
+
 root/
   - game_driver.coffee  ゲームロジックを回しクライアントに配信
 
   client/ # クライアント側
 
   server/ # ゲームロジックを記述した
+
+    Map/
+      Map.coffee
+
+    Stage/
+      - Stage.coffee # map
+      - Model.coffee # ベースクラス
+      - CharacterModel.coffee # キャラクターのモデル
 
     model/
       - Model.coffee # ベースクラス
@@ -27,3 +36,116 @@ root/
 
         abd/
           - Weapon.coffee # ベースクラス
+
+
+
+## ゲームエンジンのインスタンス概略
+world:World
+  - stages:[Stage]:
+    - players:[Player(Character)]
+    - monsters: [Monster(Character)]
+    - events : [EventObject]
+    - connections:[Stage]
+    - map:Map
+      - hmap: [[Number]]
+      - cmap: [[binary]]
+
+# キャラクター関連クラス
+
+SkillData  : DB
+ClassData  : DB
+RacialData : DB
+ItemData   : DB 
+MonsterData: DB 
+PlayerData : DB
+
+
+# DBとやり取りするモデルクラス
+CharacterModel
+  name : String
+  pass : String
+  racial_name : String
+  class_name : String
+
+  lv : Number
+  exp: Number
+  gold: Number
+
+  base_status:
+    str :Number
+    int :Number
+    dex :Number
+
+  learned : {param:Number}
+  skillset : [String]
+
+  equipment : 
+    main_hand: String
+    off_hand : String
+    head : String
+    body : String
+    legs : String
+
+# 実メモリ上のインスタンス
+Character 
+  name : String
+  stage : Stage
+
+  hp:  Number
+  HP:  Number
+  mp:  Number
+  MP:  Number
+  sight_range : Number
+
+  data : 
+    - lv :  Number
+    - exp:  Number
+    - gold: Number
+
+  status
+    - str:Number
+    - int:Number
+    - dex:Number
+
+  learned : {param:Number}
+
+  selected_skill : Skill 
+  skillset : [Skill]
+
+  x : Number
+  y : Number
+  dir : Number
+
+  recog : RecogEngine
+
+# 状況判断AI
+RecogEngine
+  stage : Stage
+  map : Map
+  target: Character or null
+  following: Character or null
+  follower: Character or null
+  is_confuse: boolean 
+
+# プレーヤーが操作可能なクラス
+Player extends Character
+  input : {key_name:boolean}
+  recogs : ControllableEngine extends RecogEngine
+
+# RecogEngineによって独立して動くクラス
+Monster extends Character
+  input : {key_name:boolean}
+  freeze : boorean
+  active_type : []
+  tarace_range : Number
+  recogs : MonsterRecogEngine extends RecogEngine
+
+# スキル
+Skill
+  active_range: Number
+  name : String
+  actor: Character
+  ct:Number
+  CT: Number
+  fg_charge : Number
+  bg_charge : Number

@@ -1,23 +1,20 @@
-{RandomStage} = require('./stages/sample')
-
-class GameCore
+class World
   constructor: (conf,max_depth,io,db) ->
     @stages = []
-    @stages[i] = new RandomStage(@,i,io.of('/f'+i),db) for i in [0...max_depth]
+
+    for area_name in ['Dungeon']
+      Stage = require("./stage/#{area_name}")
+      @stages[area_name] = new Stage
 
     @cnt = 0
     @active = true
     @fps = 15
 
-  login : (name,to)->
-
-
   enter: ->
     @cnt++
     for floor , stage of @stages
       ps = (v for _,v of stage.players)
-      if ps.length > 0
-        stage.update()
+      stage.update() if ps.length > 0
 
   start: () ->
     console.log("GameEngine started...")
@@ -34,6 +31,4 @@ class GameCore
     console.log 'Game stopped'
     @active = false
 
-  ws :->
-
-exports.GameCore = GameCore
+module.exports = World

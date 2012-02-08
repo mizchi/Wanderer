@@ -17,11 +17,8 @@ class Skill
     @ct = 0
 
   charge:(is_selected)->
-    if @ct < @CT
-      if is_selected
-        @ct += @fg_charge
-      else
-        @ct += @bg_charge
+    @ct += (if is_selected then @fg_charge else @bg_charge)
+    @ct = @CT if @ct >= @CT
 
   update: (objs,keys)->
     # for name,skill of @actor.skills
@@ -31,6 +28,14 @@ class Skill
   toData : ->
     name: @name
     lv: @lv
+  get_charge_rate:()->
+    @ct/@CT
+    
+  is_full:->
+    @ct >= @CT
+
+  can_exec:()->
+    @get_charge_rate() >= 1 
 
   exec:(objs)->
   _calc:(target)-> return 1

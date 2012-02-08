@@ -12,13 +12,12 @@ Sprite = require('./../sprite/Sprite')
 RecogEngine = require './RecogEngine' 
 class Character extends Sprite
   constructor: (@stage , model) ->
-    @map = @stage.map
+    # @map = @stage.map
     @build(model)
 
     @x = 0 
     @y = 0
     @dir = 0
-    # @target = null
 
     @uid = Number.random(0,1000)
     @cnt = Number.random(0,60)
@@ -26,7 +25,8 @@ class Character extends Sprite
     @animation = []
     @recog = new RecogEngine @
     group_id = 0
-
+    
+  get_target:-> @recog.target
 
   build: (model)->
     @lv = model.lv or 1

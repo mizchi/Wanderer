@@ -22,9 +22,9 @@
   },
   "Goblin" :{ 
     "init_bonus":{
-      "str": 1
-    , "int": -5
-    , "dex": -5
+      "str": 8
+    , "int": 4
+    , "dex": 5
     }
   },
   "hound_dog" : {

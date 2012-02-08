@@ -17,22 +17,25 @@ class CharacterModel extends Model
     lv : Number
     base_status : 
       str : Number
+      int : Number
+      dex : Number
     learned: {}
     skillset:[]
 
   _ignore_: 
     proxy: ""
 
+ 
   constructor:(params)->
     super params
     @build(params)
 
   build : (params)->
     #base_statusが未定義ならば初期化する
-    return @create(params) unless params.base_status
+    return @create_new(params) unless params.base_status
     @base_status = params.base_status 
 
-  create : (params)->
+  create_new : (params)->
     @lv = params.lv or 1
 
     @base_status = {}
@@ -62,5 +65,33 @@ class CharacterModel extends Model
     db.remove ins.name,->
       console.log ins.name , " remove done!"
 
+  level_up: ()->
+    @lv++
+    @exp = 0
+    @sp++
+    @bp++ if @lv%3 is 0 
+    @next_lv = @lv * 50
+    @rebuild()
+    @on_status_change()
+
+  get_exp:(point)->
+    @exp += point
+    if @exp >= @next_lv
+      @level_up()
+      console.log 'level up! to lv.'+@lv
+
+  set_next_exp:()->
+    @next_lv = @lv * 30
+
+  use_battle_point:(at)->
+    if @bp>0 and at in ["str","int","dex"]
+      @bp--
+      @[at] +=1
+      @rebuild()
+
+      @on_status_change()
+      true
+    else
+      null
     
 module.exports = CharacterModel

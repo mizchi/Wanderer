@@ -1,26 +1,34 @@
 {random,sqrt,min,max,sin,cos} = Math
+require 'sugar'
+Object.extend()
 
-{Character} = require './Character'
-{Status} = require './Status'
-{Equipment} = require './Equipment'
-{SkillBox} = require './skills'
+Character = require './Character'
 
-RacialData = require('./shared/data/Race')
-ClassData = require('./shared/data/Class')
-
-{Weapons} = require('./equip')
-
-#TODO : Equip Autogeneration
+RacialData = require('./../shared/data/Race')
+ClassData = require('./../shared/data/Class')
 
 class Monster extends Character 
-  constructor : (@class ,@race,equipment) ->
+  constructor : (@stage,params) ->
+    clsd = ClassData[params.class_name]
+    raced = RacialData[params.racial_name]
+
+    params.base_status = {}
+    (params.base_status[i] = clsd.init_bonus[i]+raced.init_bonus[i])  for i in ['str','int','dex']
+    @_build_status(params.base_status,params.lv)
+    super @stage,params
+
+  _build_status:(status,lv)->
+    sum = status.values().sum()
+    for i in ['str','int','dex']
+      rate = status[i]/sum 
+      status[i] += ~~(rate*lv*@potencial)
+
+  __:->
     @set_pos()
-    # @id = ObjectId.Monster
 
     racial_status = RacialData[@race]
     class_data = ClassData[@class]
     sum = 0
-    console.log @class
     for i in ['str','int','dex']
       racial_status[i] += class_data.status[i]
       sum += racial_status[i]
@@ -42,37 +50,39 @@ class Monster extends Character
     @drop_item(actor) if actor
 
   drop_item : (actor)->
+module.exports = Monster
 
-class Goblin extends Monster
-  name : "Goblin"
-  constructor: (@scene ,@lv, @group) ->
-    @per_rate = 3 # 成長率 小さいほど強い プレーヤが 3
-    @exp_rate = 1.0 # lvに応じた成長率
 
-    super 'Norvice','goblin',
-      main_hand : 
-        name : 'dagger'
-        drate : 0.7
+# class Goblin extends Monster
+#   name : "Goblin"
+#   constructor: (@scene ,@lv, @group) ->
+#     @per_rate = 3 # 成長率 小さいほど強い プレーヤが 3
+#     @exp_rate = 1.0 # lvに応じた成長率
 
-    @status.trace_range = 13
-    @selected_skill = @skills.sets[1]
+#     super 'Norvice','goblin',
+#       main_hand : 
+#         name : 'dagger'
+#         drate : 0.7
 
-  select_skill: ()->
-    return @selected_skill = @skills.sets[1]
+#     @status.trace_range = 13
+#     @selected_skill = @skills.sets[1]
 
-class HoundDog extends Monster
-  name : "HoundDog"
-  constructor: (@scene ,@lv, @group) ->
-    @per_rate = 3 # 成長率 小さいほど強い プレーヤが 3
-    @exp_rate = 1.0 # lvに応じた成長率
+#   select_skill: ()->
+#     return @selected_skill = @skills.sets[1]
 
-    super 'Norvice','hound_dog',{}
+# class HoundDog extends Monster
+#   name : "HoundDog"
+#   constructor: (@scene ,@lv, @group) ->
+#     @per_rate = 3 # 成長率 小さいほど強い プレーヤが 3
+#     @exp_rate = 1.0 # lvに応じた成長率
 
-    @status.trace_range = 17
+#     super 'Norvice','hound_dog',{}
 
-  select_skill: ()->
-    return @selected_skill = @skills.sets[1]
-    # if @status.hp < 5
+#     @status.trace_range = 17
 
-exports.HoundDog = HoundDog
-exports.Goblin = Goblin
+#   select_skill: ()->
+#     return @selected_skill = @skills.sets[1]
+#     # if @status.hp < 5
+
+# exports.HoundDog = HoundDog
+# exports.Goblin = Goblin
