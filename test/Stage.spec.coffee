@@ -28,12 +28,3 @@ describe 'StageTest',->
     stage.leave char.id
     stage.players.keys().length.should.equal 0
 
-  describe 'Dungeon',->
-    dungeon = null
-    it "初期化",->
-      dungeon = new Dungeon
-
-    it "update",->
-      dungeon.update()
-      dungeon.cnt.should.equal 1
-

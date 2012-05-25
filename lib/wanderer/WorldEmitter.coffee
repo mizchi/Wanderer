@@ -1,6 +1,6 @@
 World = require './World'
 
-conf = 
+conf =
   '中央ダンジョン':
     name : 'CentralDungeon'
     connections : [
@@ -17,5 +17,5 @@ class WorldEmitter extends World
   emit: ->
     for _ ,stage_emitter of @stages
       stage_emitter.emit() unless stage.is_freeze()
-      
+
 module.exports = WorldEmitter

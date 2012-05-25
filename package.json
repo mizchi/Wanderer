@@ -5,9 +5,8 @@
     "dependencies": {
         "coffee-script": ">= 1.2.0",
         "nstore":">=0.4",
-        "oauth": ">= 0.9",
-        "zappa": ">= 0.2",
-        "underscore": ">= 0.2"
+        "underscore": ">= 0.2",
+        "dnode":""
     },
     "bin": [
         {"mmo-server-start":"./server-start.js"}

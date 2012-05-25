@@ -2,6 +2,7 @@ require 'sugar'
 Object.extend()
 
 class Map 
+
   constructor: (@stage)->
     @cmap = []
     @hmap = []
@@ -23,16 +24,15 @@ class Map
           @cmap[i][j] = 0
           @hmap[i][j] = 0
 
-
   get_point: (x,y)->
-    return [~~(x)+1/2,~~(y)+1/2]
+    return [~~(x),~~(y)]
 
   get_random_point: ()->
     rx = Number.random 0 ,@cmap.length
     ry = Number.random 0, @cmap[0].length
     if @_map[rx][ry]
       return @get_random_point()
-    return [rx+1/2,ry+1/2]
+    return [rx,ry]
 
   collide: (x,y)->
     return @cmap[~~(x)][~~(y)]
@@ -50,8 +50,10 @@ class Map
       constructor:(@pos)->
         @owner_list  = null
         @parent = null
-        @hs     = (pos[0]-@goal[0]).pow(2)+(pos[1]-@goal[1]).pow(2)
+        @hs     = (@pos[0]-@goal[0]).pow(2)+
+          (@pos[1]-@goal[1]).pow(2)
         @fs     = 0
+
 
     search_path =[
       [-1,-1], [ 0,-1], [ 1,-1]
@@ -87,12 +89,17 @@ class Map
       n_gs = min_node.fs - min_node.hs
 
       for [x,y] in search_path
-        # 斜めの判定が可能か
-        if abs(x)+abs(y) > 1
+        if x.abs()+y.abs() > 1
           unless !@cmap[x+mx][my] and !@cmap[mx][y+my]
             continue
 
         [nx,ny] = [x+mx,y+my]
+
+        unless @cmap[nx]
+          console.log 'DungeonTest#update'
+          console.log @cmap[nx]
+
+
         unless @cmap[nx][ny]
           dist = (mx-nx).pow(2) + (my-ny).pow(2)
 

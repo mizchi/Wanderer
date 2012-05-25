@@ -21,3 +21,14 @@ describe 'MapTest',->
     map.update()
     map.cnt.should.equal 1
 
+  describe "#search_path",->
+    it "[5,5] to [6,6]",->
+      path = map.search_path [5,5],[6,6]
+      path.length.should.equal 1
+
+    it "[5,5] to [8,8]",->
+      path = map.search_path [5,5],[8,8]
+      path.length.should.equal 3
+
+
+

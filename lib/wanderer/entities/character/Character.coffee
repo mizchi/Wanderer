@@ -12,6 +12,7 @@ Sprite = require('./../sprite/Sprite')
 RecogEngine = require './RecogEngine' 
 class Character extends Sprite
   constructor: (@stage , model) ->
+    @name = model.name
     # @map = @stage.map
     @build(model)
 
@@ -24,7 +25,7 @@ class Character extends Sprite
 
     @animation = []
     @recog = new RecogEngine @
-    group_id = 0
+    @group_id = 0
     
   get_target:-> @recog.target
 
@@ -92,18 +93,18 @@ class Character extends Sprite
 
 
   move: ->
-    if @_on_going_destination
-      if @recog.target
-        @set_dir(@recog.target.x,@recog.target.y)
-        return if @get_distance(@recog.target) < @selected_skill.range
-    else
-      return if @is_waiting()
+    # if @_on_going_destination
+    #   if @recog.target
+    #     @set_dir(@recog.target.x,@recog.target.y)
+    #     return if @get_distance(@recog.target) < @selected_skill.range
+    # else
+    #   return if @is_waiting()
 
-    if @destination
-      @update_path( [~~(@x),~~(@y)],[~~(@destination.x),~~(@destination.y)] )
-      @to = @_path.shift()
-      @destination = null
-      @_on_going_destination = true
+    # if @destination
+    #   @update_path( [~~(@x),~~(@y)],[~~(@destination.x),~~(@destination.y)] )
+    #   @to = @_path.shift()
+    #   @destination = null
+    #   @_on_going_destination = true
 
     unless @to
       if @target
@@ -198,17 +199,6 @@ class Character extends Sprite
     if item.at in (k for k,v of @equipment)
       @equipment[item.at] = item
     false
-
-  get_item:(item)->
-    null
-    # @items.push(item)
-
-  use_item:(item)->
-    # @items.remove(item)
-
-  get_param:(param)->
-    0
-    # (item?[param] or 0 for at,item of @equipment).reduce (x,y)-> x+y
 
   add_animation:(animation)->
     @animation.push(animation)

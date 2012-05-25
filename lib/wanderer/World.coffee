@@ -15,13 +15,14 @@ class World
     for floor , stage of @stages
       ps = (v for _,v of stage.players)
       stage.update() if ps.length > 0
+    unless @cnt%15
+      console.log @
 
   start: () ->
     console.log("GameEngine started...")
     @active = true
     mainloop = =>
       @enter()
-      @ws()
       if @active
         setTimeout mainloop
         , 1000/@fps
@@ -32,3 +33,5 @@ class World
     @active = false
 
 module.exports = World
+w = new World
+w.start()
