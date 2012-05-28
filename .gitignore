@@ -1,5 +1,3 @@
 savedata/users.db
-config.coffee
-.DS_Store
+config/config.json
 node_modules
-.nide

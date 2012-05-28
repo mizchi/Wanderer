@@ -1,22 +1,27 @@
-config = require './config'
-require('zappa') config.port, ->
-  @io.configure =>
-    @io.set( "log level", 1 )
-    @io.set "authorization", (handshake, callback) ->
-      cookie = handshake.headers.cookie;
-      handshake.foo = cookie
-      callback(null, true)
-  @app.use @express.bodyParser()
-  @app.use @express.methodOverride()
-  @app.use @express.cookieParser()
-  @app.use @express.session
-    secret: config.session_secret
-    cookie: { maxAge: 86400 * 1000 }
-  @app.use @app.router
-  @app.use @express.static __dirname+'/client'
-  @app.set 'views', __dirname + '/client/templates'
-  @app.use @express.favicon()
-  @set 'views', __dirname + '/views'
-  @enable 'serve jquery'
-  @include 'web'
-  @include 'bloadcaster'
+express = require('express')
+app = express.createServer()
+app.use express.static(__dirname)
+
+app.use (require "connect-assets")()
+app.listen(8000)
+console.log('http://localhost:8000/')
+
+dnode = require('dnode')
+server = dnode
+  zing : (n, cb) -> cb(n * 100)
+
+app.get '/', (req, res) -> res.send 'hello'
+
+# server.listen(app)
+#   io.configure ->
+#   io.enable 'browser client minification'  # JSを圧縮する
+#   io.enable 'browser client etag'  # etagによるキャッシュを有効にする
+#   io.enable 'browser client gzip'  # gzipして転送する
+#   io.set 'log level', 1   # ログ出力を減らす
+#   io.set 'transports', [  # すべての通信手段を有効にする
+#            'websocket'
+#            'flashsocket'
+#            'htmlfile'
+#            'xhr-polling'
+#            'jsonp-polling'
+#      ]

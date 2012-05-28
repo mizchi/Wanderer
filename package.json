@@ -1,14 +1,17 @@
 {
-    "name": "mmorpg",
+    "name": "wanderer",
     "version": "0.0.1",
-    "main": "./",
     "dependencies": {
-        "coffee-script": ">= 1.2.0",
-        "nstore":">=0.4",
-        "underscore": ">= 0.2",
-        "dnode":""
-    },
-    "bin": [
-        {"mmo-server-start":"./server-start.js"}
-    ]
+        "coffee-script": "*",
+        "nstore":"*",
+        "underscore": "*",
+        "sugar": "*",
+        "dnode":"*",
+        "express":"*",
+        "connect":"*",
+        "connect-redis":"*",
+        "redis":"*",
+        "connect-assets":"*",
+        "socket.io":"*"
+    }
 }
